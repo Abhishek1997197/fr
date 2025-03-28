@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Whispering City</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1a1a1a;
+            color: #fff;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        #chat {
+            width: 80%;
+            max-width: 600px;
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #555;
+            padding: 10px;
+            background: #222;
+            margin-bottom: 10px;
+        }
+        .message {
+            padding: 5px;
+            margin: 5px 0;
+        }
+        .user { text-align: right; color: cyan; }
+        .city { text-align: left; color: orange; }
+        #inputBox {
+            width: 70%;
+            padding: 10px;
+            margin: 5px;
+        }
+        #sendButton {
+            padding: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>The Whispering City</h1>
+    <div id="chat"></div>
+    <input type="text" id="inputBox" placeholder="Speak to the city...">
+    <button id="sendButton">Send</button>
+    
+    <script>
+        const messages = [
+            "The city whispers: 'The past is buried, but not forgotten.'",
+            "A distant voice echoes: 'Not all who wander are lost, but some are.'",
+            "You feel a chill as the city murmurs: 'Look where the sun sets on the old bridge.'",
+            "A shadow moves, and a whisper follows: 'The answer lies beneath your feet.'"
+        ];
+
+        const memory = new Set();
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const chatBox = document.getElementById("chat");
+            const inputBox = document.getElementById("inputBox");
+            const sendButton = document.getElementById("sendButton");
+
+            function addMessage(text, sender) {
+                const message = document.createElement("div");
+                message.classList.add("message", sender);
+                message.textContent = text;
+                chatBox.appendChild(message);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+
+            function getResponse(userInput) {
+                if (!memory.has(userInput.toLowerCase())) {
+                    memory.add(userInput.toLowerCase());
+                    return messages[Math.floor(Math.random() * messages.length)];
+                } else {
+                    return "The city remains silent, as if waiting for something new...";
+                }
+            }
+
+            sendButton.addEventListener("click", function() {
+                const userInput = inputBox.value.trim();
+                if (userInput) {
+                    addMessage(userInput, "user");
+                    setTimeout(() => {
+                        addMessage(getResponse(userInput), "city");
+                    }, 1000);
+                    inputBox.value = "";
+                }
+            });
+        });
+    </script>
+</body>
+</html>
